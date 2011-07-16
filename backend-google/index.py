@@ -8,8 +8,8 @@ from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-from urlparse import urlparse
 import uuid
+from urlparse import urlparse
 
 class Log(db.Model):
   """Models an individual Log entry with an author, content, and date."""
@@ -32,42 +32,6 @@ class MainPage(webapp.RequestHandler):
     self.response.out.write('<p>Here is the RSS stream where your entries are stored: <div>http://thought-logger.appspot.com/%s/get</div></p>' % logbook_name)
     self.response.out.write('</body></html>')
 
-#    logbook_name=self.request.get('logbook_name')
-
-    # Ancestor Queries, as shown here, are strongly consistent with the High
-    # Replication datastore. Queries that span entity groups are eventually
-    # consistent. If we omitted the ancestor from this query there would be a
-    # slight chance that Log that had just been written would not show up
-    # in a query.
-"""    logs = db.GqlQuery("SELECT * "
-                            "FROM Log "
-                            "WHERE ANCESTOR IS :1 "
-                            "ORDER BY date DESC LIMIT 10",
-                            logbook_key(logbook_name))
-
-    for log in logs:
-      if log.author:
-        self.response.out.write(
-            '<b>%s</b> wrote:' % log.author.nickname())
-      else:
-        self.response.out.write('An anonymous person wrote:')
-      self.response.out.write('<blockquote>%s</blockquote>' %
-                              cgi.escape(log.content))
-"""
-
-#    self.response.out.write("""
-#          <form action="/log?%s" method="post">
-#            <div><textarea name="content" rows="3" cols="60"></textarea></div>
-#            <div><input type="submit" value="Log"></div>
-#          </form>
-#          <hr>
-#          <form>Logbook name: <input value="%s" name="logbook_name">
-#          <input type="submit" value="switch"></form>
-#        </body>
-#      </html>""" % (urllib.urlencode({'logbook_name': logbook_name}),
-#                          cgi.escape(logbook_name)))
-
-
 class Logbook(webapp.RequestHandler):
   def post(self):
     # We set the same parent key on the 'Log' to ensure each log is in
@@ -82,16 +46,14 @@ class Logbook(webapp.RequestHandler):
 
     log.content = self.request.get('content')
     log.put()
-    self.redirect('/?' + urllib.urlencode({'logbook_name': logbook_name}))
 
 class GetRss(webapp.RequestHandler):
   def get(self):
     logbook_name = urlparse(self.request.url).path.split('/')[1]
     self.response.headers['Content-Type'] = 'text/xml' 
-    self.response.out.write("""<rss version="2.0">
-	<channel>
-		<title>Thought log</title>
-		<description>This is a personal thought log</description>""")
+    self.response.out.write('<rss version="2.0"><channel>')
+    self.response.out.write('<title>Thought log</title>')
+    self.response.out.write('<description>This is a personal thought log</description>""")')
     self.response.out.write('<link>http://thought-logger.appspot.com/' + logbook_name + '/get</link>')
     self.response.out.write('<lastBuildDate>%s GMT</lastBuildDate>' % datetime.datetime.now())
     self.response.out.write('<pubDate>%s GMT</pubDate>' % datetime.datetime.now())
