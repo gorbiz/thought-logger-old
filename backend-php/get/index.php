@@ -17,7 +17,7 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>' . PHP_EOL;
 		<item>
 			<title><?php echo $entry->content; ?></title>
 			<description><?php echo $entry->content; ?></description>
-			<link>http://www.exaample.com/</link>
+			<link>http://www.example.com/</link>
 			<pubDate><?php echo date('r', strtotime($entry->time)); ?></pubDate>
 		</item>	
 		<?php endforeach; ?>
