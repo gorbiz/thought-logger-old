@@ -13,24 +13,52 @@ from urlparse import urlparse
 
 class Log(db.Model):
   """Models an individual Log entry with an author, content, and date."""
+  # TODO Remove author
   author = db.UserProperty()
+  read_key = db.StringProperty()
   content = db.StringProperty(multiline=True)
   date = db.DateTimeProperty(auto_now_add=True)
 
+class Book(db.Model):
+  """Models a user/account/book with email, read key, write key and date."""
+  author = db.UserProperty()
+  read_key = db.StringProperty()
+  write_key = db.StringProperty()
+  updated = db.DateTimeProperty(auto_now_add=True)
+  
 
 def logbook_key(logbook_name=None):
   """Constructs a datastore key for a Log entity with logbook_name."""
   return db.Key.from_path('Log', logbook_name or 'default_log')
 
-
 class MainPage(webapp.RequestHandler):
   def get(self):
+    user = users.get_current_user()
+
+    if user:
+      self.response.headers['Content-Type'] = 'text/plain'
+      self.response.out.write('Hello, ' + user.nickname())
+
+      # TODO Get Book by user_id or email
+      # else:
+
+      book = Book()
+      book.author = users.get_current_user()
+      book.read_key = str(uuid.uuid4())
+      book.write_key = str(uuid.uuid4())
+      book.put()
+
+    else:
+      self.redirect(users.create_login_url(self.request.uri))
+
+    application = webapp.WSGIApplication([('/', MainPage)], debug=True)
+    
     # TODO Make this uuid attach to the google account instead...
-    self.response.out.write('<html><header><title>Though logger links</title></header><body>')
-    logbook_name=uuid.uuid4()
-    self.response.out.write('<p>Put this under "Where to pass entries" in your Thought logger: <div>http://thought-logger.appspot.com/%s/log</div></p>' % logbook_name)
-    self.response.out.write('<p>Here is the RSS stream where your entries are stored: <div>http://thought-logger.appspot.com/%s/get</div></p>' % logbook_name)
-    self.response.out.write('</body></html>')
+    #self.response.out.write('<html><header><title>Though logger links</title></header><body>')
+    #logbook_name=uuid.uuid4()
+    #self.response.out.write('<p>Put this under "Where to pass entries" in your Thought logger: <div>http://thought-logger.appspot.com/%s/log</div></p>' % logbook_name)
+    #self.response.out.write('<p>Here is the RSS stream where your entries are stored: <div>http://thought-logger.appspot.com/%s/get</div></p>' % logbook_name)
+    #self.response.out.write('</body></html>')
 
 class Logbook(webapp.RequestHandler):
   def post(self):
