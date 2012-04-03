@@ -66,6 +66,9 @@ class Logbook(webapp.RequestHandler):
     # the same entity group. Queries across the single entity group will be
     # consistent. However, the write rate to a single entity group should
     # be limited to ~1/second.
+
+    self.response.headers['Access-Control-Allow-Origin'] = '*'
+
     logbook_name = urlparse(self.request.url).path.split('/')[1]
     log = Log(parent=logbook_key(logbook_name))
 
