@@ -10,12 +10,21 @@ require_once 'thought-logger/credentials.php';
     <script type="text/javascript">
         $(document).ready(function() {
             $("#content").focus();
+
+            $("#form").submit(function() {
+                var data = {content: $("#content").val()};
+                $.post(this.action, data, function(data) {
+                    $("#content").val("");
+                    $("#content").focus();
+                });
+                return false;
+            });
         });
     </script>
 </head>
 
 <body>
-	<form action="<?php echo THOUGHT_LOGGER_SERVER_URL; ?>" method="post">
+	<form action="<?php echo THOUGHT_LOGGER_SERVER_URL; ?>" method="post" id="form">
 		<input name="content" id="content" type="text" style="width:100%; font-size: 2em;" x-webkit-speech="x-webkit-speech" /><br />
 		<input type="submit" style="font-size:5em;" />
 		<input type="reset" style="font-size:5em;" />
