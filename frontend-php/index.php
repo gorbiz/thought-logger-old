@@ -13,9 +13,10 @@ require_once 'thought-logger/credentials.php';
 
             $("#form").submit(function() {
                 var data = {content: $("#content").val()};
+                $("#content").val("");
+                $("#content").focus();
                 $.post(this.action, data, function(data) {
-                    $("#content").val("");
-                    $("#content").focus();
+                    // TODO Make sure that this always works.
                 });
                 return false;
             });
