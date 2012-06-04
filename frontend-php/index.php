@@ -2,6 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Kalle's thought-logger</title>
     <link rel="apple-touch-icon" href="thought-logger-icon.png" />
     <link rel="apple-touch-icon-precomposed" href="thought-logger-icon.png" />
@@ -10,10 +12,13 @@
     <script type="text/javascript">
         $(document).ready(function() {
 
-            // "Hide" the browser bar on load
-            if(navigator.userAgent.match(/Android/i)){
-                window.scrollTo(0,1);
+            function hideAddressBar(){
+                if (document.documentElement.scrollHeight<window.outerHeight/window.devicePixelRatio)
+                    document.documentElement.style.height=(window.outerHeight/window.devicePixelRatio)+'px';
+                setTimeout(function() { window.scrollTo(1,1) } ,0);
             }
+            window.addEventListener("load",function(){hideAddressBar();});
+            window.addEventListener("orientationchange",function(){hideAddressBar();});
 
             $("#content").focus();
 
