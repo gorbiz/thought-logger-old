@@ -83,7 +83,7 @@
 
 <body>
 	<form action="<?php echo THOUGHT_LOGGER_SERVER_URL; ?>" method="post" id="form" autocomplete="off">
-		<input name="content" id="content" type="text" autocomplete="off" x-webkit-speech="x-webkit-speech" />
+		<input name="content" id="content" type="text" autocomplete="off" />
 	</form>
 </body>
 
