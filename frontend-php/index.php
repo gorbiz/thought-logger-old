@@ -21,7 +21,7 @@
             border: 0;
             text-align: center;
             background: #000;
-            color: #bbb;
+            color: #119090;
             font-family: Helvetica, arial, sans-serif;
         }
 
