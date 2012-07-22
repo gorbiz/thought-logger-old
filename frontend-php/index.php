@@ -53,9 +53,12 @@
                     document.documentElement.style.height = (window.outerHeight / window.devicePixelRatio + 1) + 'px';
                 setTimeout(function() { window.scrollTo(1, 1) } ,0);
             }
-            window.addEventListener("load",function(){hideAddressBar();});
-            window.addEventListener("orientationchange",function(){hideAddressBar();});
+            window.addEventListener("load", function() { hideAddressBar(); });
+            window.addEventListener("orientationchange", function() { hideAddressBar(); });
 
+            // Very specific to my HTC Desire Z
+            // should not cause too much damage on most devices though
+            $("#content").css('height', $(window).height() - 26);
             // Vertical alignment
             $("#content").vertical_center();
             $(window).bind('resize', function() {
