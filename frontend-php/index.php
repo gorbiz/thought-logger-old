@@ -29,32 +29,31 @@
             outline: none;
         }
         * {
-            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);	
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         }
     </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            
+
             jQuery.fn.vertical_center = function () {
                 this.css("position","absolute");
                 this.css("top",
-                        (($(window).height() - this.outerHeight()) / 2) + 
+                        (($(window).height() - this.outerHeight()) / 2) +
                         $(window).scrollTop() + "px");
                 return this;
-            }            
+            }
 
             // Hack around autocomplete="off" issue on Android
             $("#content").attr("name", "field_" + (new Date().getTime()));
-            
+
             function hideAddressBar(){
                 if (document.documentElement.scrollHeight < window.outerHeight / window.devicePixelRatio)
                     document.documentElement.style.height = (window.outerHeight / window.devicePixelRatio + 1) + 'px';
-                setTimeout(function() { window.scrollTo(1, 1) } ,0);
+                setTimeout(function() { window.scrollTo(1, 1) }, 0);
             }
             window.addEventListener("load", function() { hideAddressBar(); });
-            window.addEventListener("orientationchange", function() { hideAddressBar(); });
 
             // Very specific to my HTC Desire Z
             // should not cause too much damage on most devices though
@@ -64,7 +63,7 @@
             $(window).bind('resize', function() {
                 $("#content").vertical_center();
             });
-            
+
             // Keep the focus on the text field
             $("#content").focus();
             $("html").live('click', function() {
